@@ -5,13 +5,20 @@ import com.mycompany.proyectoatomatas.model.Automata;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-
+import com.mycompany.proyectoatomatas.ProyectoAtomatas;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JOptionPane;
+import com.mycompany.proyectoatomatas.algorithm.SimuladorAutomata;
+import com.mycompany.proyectoatomatas.model.Cadena;
+import com.mycompany.proyectoatomatas.model.Estado;
+
+import java.util.List;
+
+import javax.swing.Timer;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -23,7 +30,8 @@ public class VentanaPrincipal extends JFrame {
 
     // COMPONENTES
     private JTextField txtCadena;
-
+    
+    private JLabel lblResultado;
     private JButton btnAgregarEstado;
     private JButton btnSeleccionar;
     private JButton btnTransicion;
@@ -41,7 +49,9 @@ public class VentanaPrincipal extends JFrame {
 
         automata = new Automata();
 
-        setTitle("Simulador de Autómatas - AFD a Regex");
+        setTitle(
+        "Simulador de Autómatas - AFD a Regex | Versión "
+        + ProyectoAtomatas.VERSION);
 
         setSize(1100, 700);
 
@@ -101,10 +111,13 @@ public class VentanaPrincipal extends JFrame {
         );
 
         btnSimular = new JButton("Simular");
-
+        lblResultado = new JLabel("Resultado: ---");
+        JLabel lblVersion = new JLabel("Versión: " + ProyectoAtomatas.VERSION);
         panelInferior.add(lblCadena);
         panelInferior.add(txtCadena);
         panelInferior.add(btnSimular);
+        panelInferior.add(lblResultado);
+        panelInferior.add(lblVersion);
 
         add(panelInferior, BorderLayout.SOUTH);
 
@@ -243,8 +256,135 @@ public class VentanaPrincipal extends JFrame {
             }
         });
 
-        // El botón Simular se programará
-        // en la siguiente etapa.
+        //Botón Simular }
+        btnSimular.addActionListener(e -> {
+
+    // Salir del modo agregar/transición
+    panelAutomata.activarModoSeleccion();
+
+    // Obtener texto escrito
+    Cadena cadena =
+            new Cadena(txtCadena.getText());
+
+    // Validar estado inicial
+    if (automata.getEstadoInicial() == null) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Debes marcar un estado inicial.",
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+        );
+
+        return;
+    }
+
+    // Crear simulador
+    SimuladorAutomata simulador =
+            new SimuladorAutomata(automata);
+
+    // Obtener recorrido
+    List<SimuladorAutomata.Paso> pasos =
+            simulador.simular(cadena);
+
+    // Si no existe alguna transición necesaria
+    if (pasos == null) {
+
+        panelAutomata.limpiarResaltado();
+
+        lblResultado.setText(
+                "Resultado: RECHAZADA"
+        );
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Cadena RECHAZADA.\n"
+                + "No existe una transición válida "
+                + "para alguno de los símbolos.",
+                "Resultado",
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        return;
+    }
+
+    // Mostrar estado inicial primero
+    panelAutomata.resaltarEstado(
+            automata.getEstadoInicial()
+    );
+
+    final int[] posicion = {0};
+
+    // 1 segundo entre cada paso
+    Timer timer = new Timer(1000, null);
+
+    timer.addActionListener(evento -> {
+
+        // Todavía quedan transiciones
+        if (posicion[0] < pasos.size()) {
+
+            SimuladorAutomata.Paso paso =
+                    pasos.get(posicion[0]);
+
+            panelAutomata.resaltarPaso(
+                    paso.getDestino(),
+                    paso.getTransicion()
+            );
+
+            posicion[0]++;
+
+            return;
+        }
+
+        // Terminó la cadena
+        timer.stop();
+
+        Estado estadoFinal =
+                simulador.obtenerEstadoFinal(
+                        cadena,
+                        pasos
+                );
+
+        boolean aceptada =
+                simulador.esAceptada(
+                        estadoFinal
+                );
+
+        if (aceptada) {
+
+            lblResultado.setText(
+                    "Resultado: ACEPTADA"
+            );
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "La cadena fue ACEPTADA.",
+                    "Resultado",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+
+        } else {
+
+            lblResultado.setText(
+                    "Resultado: RECHAZADA"
+            );
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "La cadena fue RECHAZADA.",
+                    "Resultado",
+                    JOptionPane.WARNING_MESSAGE
+            );
+        }
+    });
+
+    // Primero muestra q0 durante 1 segundo
+    timer.setInitialDelay(1000);
+
+    timer.start();
+});
+        
+        
     }
 
     // =====================================================
