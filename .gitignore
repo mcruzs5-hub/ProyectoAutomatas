@@ -1,0 +1,10 @@
+(
+echo target/
+echo nbproject/private/
+echo *.class
+echo *.log
+echo .idea/
+echo .vscode/
+echo .DS_Store
+echo Thumbs.db
+) > .gitignore
