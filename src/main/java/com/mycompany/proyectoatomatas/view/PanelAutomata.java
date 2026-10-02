@@ -397,16 +397,23 @@ public class PanelAutomata extends mxGraphComponent {
     // 10. VALIDAR SÍMBOLOS
     // =====================================================
 
-    private boolean simboloValido(String simbolo) {
+private boolean simboloValido(String simbolo) {
 
-        return !simbolo.isEmpty()
-                && !simbolo.equals("ε")
-                && simbolo.codePointCount(
-                        0,
-                        simbolo.length()
-                ) == 1;
+    if (simbolo == null || simbolo.isEmpty()) {
+        return false;
     }
 
+    // No permitimos epsilon como transición consumible de un AFD
+    if (simbolo.equals("ε")) {
+        return false;
+    }
+
+    // Aceptar exactamente un símbolo Unicode
+    return simbolo.codePointCount(
+            0,
+            simbolo.length()
+    ) == 1;
+}
     // =====================================================
     // 11. CREAR TRANSICIONES
     // =====================================================
@@ -945,4 +952,197 @@ public class PanelAutomata extends mxGraphComponent {
 
         return true;
     }
+    
+    public Object obtenerCeldaEstadoVisual(Estado estado) {
+
+    for (Map.Entry<Object, Estado> entrada
+            : mapaEstados.entrySet()) {
+
+        if (entrada.getValue() == estado) {
+            return entrada.getKey();
+        }
+    }
+
+    return null;
+}
+
+public Object obtenerCeldaTransicionVisual(
+        Transicion transicion
+) {
+
+    for (Map.Entry<Object, Transicion> entrada
+            : mapaTransiciones.entrySet()) {
+
+        if (entrada.getValue() == transicion) {
+            return entrada.getKey();
+        }
+    }
+
+    return null;
+}
+
+public void limpiarResaltado() {
+
+    grafo.getModel().beginUpdate();
+
+    try {
+
+        // Restaurar estados
+        for (Map.Entry<Object, Estado> entrada
+                : mapaEstados.entrySet()) {
+
+            Estado estado = entrada.getValue();
+
+            String color;
+
+            if (estado.isInicial()) {
+                color = "#75C9CF";
+            } else {
+                color = "#FFFFFF";
+            }
+
+            grafo.setCellStyles(
+                    mxConstants.STYLE_FILLCOLOR,
+                    color,
+                    new Object[]{entrada.getKey()}
+            );
+
+            grafo.setCellStyles(
+                    mxConstants.STYLE_STROKECOLOR,
+                    "#000000",
+                    new Object[]{entrada.getKey()}
+            );
+
+            grafo.setCellStyles(
+                    mxConstants.STYLE_STROKEWIDTH,
+                    "2",
+                    new Object[]{entrada.getKey()}
+            );
+        }
+
+        // Restaurar transiciones
+        for (Object arista : mapaTransiciones.keySet()) {
+
+            grafo.setCellStyles(
+                    mxConstants.STYLE_STROKECOLOR,
+                    "#000000",
+                    new Object[]{arista}
+            );
+
+            grafo.setCellStyles(
+                    mxConstants.STYLE_STROKEWIDTH,
+                    "2",
+                    new Object[]{arista}
+            );
+        }
+
+    } finally {
+
+        grafo.getModel().endUpdate();
+    }
+
+    grafo.refresh();
+}
+    public void resaltarEstado(Estado estado) {
+
+    limpiarResaltado();
+
+    Object celda =
+            obtenerCeldaEstadoVisual(estado);
+
+    if (celda == null) {
+        return;
+    }
+
+    grafo.getModel().beginUpdate();
+
+    try {
+
+        grafo.setCellStyles(
+                mxConstants.STYLE_FILLCOLOR,
+                "#FFF59D",
+                new Object[]{celda}
+        );
+
+        grafo.setCellStyles(
+                mxConstants.STYLE_STROKECOLOR,
+                "#FF9800",
+                new Object[]{celda}
+        );
+
+        grafo.setCellStyles(
+                mxConstants.STYLE_STROKEWIDTH,
+                "3",
+                new Object[]{celda}
+        );
+
+    } finally {
+
+        grafo.getModel().endUpdate();
+    }
+
+    grafo.refresh();
+}
+    public void resaltarPaso(
+        Estado destino,
+        Transicion transicion
+) {
+
+    limpiarResaltado();
+
+    Object celdaEstado =
+            obtenerCeldaEstadoVisual(destino);
+
+    Object celdaTransicion =
+            obtenerCeldaTransicionVisual(transicion);
+
+    grafo.getModel().beginUpdate();
+
+    try {
+
+        // Flecha utilizada
+        if (celdaTransicion != null) {
+
+            grafo.setCellStyles(
+                    mxConstants.STYLE_STROKECOLOR,
+                    "#F44336",
+                    new Object[]{celdaTransicion}
+            );
+
+            grafo.setCellStyles(
+                    mxConstants.STYLE_STROKEWIDTH,
+                    "4",
+                    new Object[]{celdaTransicion}
+            );
+        }
+
+        // Estado actual
+        if (celdaEstado != null) {
+
+            grafo.setCellStyles(
+                    mxConstants.STYLE_FILLCOLOR,
+                    "#FFF59D",
+                    new Object[]{celdaEstado}
+            );
+
+            grafo.setCellStyles(
+                    mxConstants.STYLE_STROKECOLOR,
+                    "#FF9800",
+                    new Object[]{celdaEstado}
+            );
+
+            grafo.setCellStyles(
+                    mxConstants.STYLE_STROKEWIDTH,
+                    "3",
+                    new Object[]{celdaEstado}
+            );
+        }
+
+    } finally {
+
+        grafo.getModel().endUpdate();
+    }
+
+    grafo.refresh();
+}
 }
