@@ -2,7 +2,7 @@
 package com.mycompany.proyectoatomatas.view;
 
 import com.mycompany.proyectoatomatas.model.Automata;
-
+import com.mycompany.proyectoatomatas.algorithm.ConversorRegex;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import com.mycompany.proyectoatomatas.ProyectoAtomatas;
@@ -40,6 +40,7 @@ public class VentanaPrincipal extends JFrame {
     private JButton btnEditar;
     private JButton btnEliminar;
     private JButton btnSimular;
+    private JButton btnConvertirRegex;
 
     // =====================================================
     // CONSTRUCTOR
@@ -81,6 +82,7 @@ public class VentanaPrincipal extends JFrame {
         btnFinal = new JButton("Final");
         btnEditar = new JButton("Editar");
         btnEliminar = new JButton("Eliminar");
+        btnConvertirRegex = new JButton("Convertir a Regex");
 
         panelSuperior.add(btnAgregarEstado);
         panelSuperior.add(btnSeleccionar);
@@ -89,6 +91,7 @@ public class VentanaPrincipal extends JFrame {
         panelSuperior.add(btnFinal);
         panelSuperior.add(btnEditar);
         panelSuperior.add(btnEliminar);
+        panelSuperior.add(btnConvertirRegex);
 
         add(panelSuperior, BorderLayout.NORTH);
 
@@ -109,7 +112,70 @@ public class VentanaPrincipal extends JFrame {
         txtCadena.setPreferredSize(
                 new Dimension(250, 30)
         );
+        // =================================================
+// BOTÓN CONVERTIR A REGEX
+// =================================================
 
+btnConvertirRegex.addActionListener(e -> {
+
+    panelAutomata.activarModoSeleccion();
+
+    restaurarBotones();
+
+    // Validar estado inicial
+    if (automata.getEstadoInicial() == null) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Debes definir un estado inicial.",
+                "Conversión a Regex",
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        return;
+    }
+
+    // Validar estados finales
+    if (automata.getEstadosAceptacion().isEmpty()) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Debes definir al menos un estado final.",
+                "Conversión a Regex",
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        return;
+    }
+
+    try {
+
+        ConversorRegex conversor =
+                new ConversorRegex(
+                        automata
+                );
+
+        ConversorRegex.ResultadoConversion resultado =
+                conversor.convertir();
+
+        VentanaConversionRegex ventana =
+                new VentanaConversionRegex(
+                        resultado
+                );
+
+        ventana.setVisible(true);
+
+    } catch (Exception ex) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                "No fue posible convertir el autómata.\n"
+                + ex.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+        );
+    }
+    });
         btnSimular = new JButton("Simular");
         lblResultado = new JLabel("Resultado: ---");
         JLabel lblVersion = new JLabel("Versión: " + ProyectoAtomatas.VERSION);
