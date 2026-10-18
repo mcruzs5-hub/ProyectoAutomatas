@@ -1,6 +1,14 @@
-C:\Users\INICIO\Documents\NetBeansProjects\ProyectoAtomatas\src\main\java\com\mycompany\proyectoatomatas\model\Automata.java
-C:\Users\INICIO\Documents\NetBeansProjects\ProyectoAtomatas\src\main\java\com\mycompany\proyectoatomatas\model\Estado.java
-C:\Users\INICIO\Documents\NetBeansProjects\ProyectoAtomatas\src\main\java\com\mycompany\proyectoatomatas\model\Transicion.java
-C:\Users\INICIO\Documents\NetBeansProjects\ProyectoAtomatas\src\main\java\com\mycompany\proyectoatomatas\ProyectoAtomatas.java
-C:\Users\INICIO\Documents\NetBeansProjects\ProyectoAtomatas\src\main\java\com\mycompany\proyectoatomatas\view\PanelAutomata.java
-C:\Users\INICIO\Documents\NetBeansProjects\ProyectoAtomatas\src\main\java\com\mycompany\proyectoatomatas\view\VentanaPrincipal.java
+C:\Users\migue\Downloads\ProyectoAutomatas-main (1)\ProyectoAutomatas-main\src\main\java\com\mycompany\proyectoatomatas\algorithm\ConversorRegex.java
+C:\Users\migue\Downloads\ProyectoAutomatas-main (1)\ProyectoAutomatas-main\src\main\java\com\mycompany\proyectoatomatas\algorithm\SimuladorAutomata.java
+C:\Users\migue\Downloads\ProyectoAutomatas-main (1)\ProyectoAutomatas-main\src\main\java\com\mycompany\proyectoatomatas\algorithm\VerificadorEquivalencia.java
+C:\Users\migue\Downloads\ProyectoAutomatas-main (1)\ProyectoAutomatas-main\src\main\java\com\mycompany\proyectoatomatas\model\Automata.java
+C:\Users\migue\Downloads\ProyectoAutomatas-main (1)\ProyectoAutomatas-main\src\main\java\com\mycompany\proyectoatomatas\model\Cadena.java
+C:\Users\migue\Downloads\ProyectoAutomatas-main (1)\ProyectoAutomatas-main\src\main\java\com\mycompany\proyectoatomatas\model\Estado.java
+C:\Users\migue\Downloads\ProyectoAutomatas-main (1)\ProyectoAutomatas-main\src\main\java\com\mycompany\proyectoatomatas\model\Transicion.java
+C:\Users\migue\Downloads\ProyectoAutomatas-main (1)\ProyectoAutomatas-main\src\main\java\com\mycompany\proyectoatomatas\ProyectoAtomatas.java
+C:\Users\migue\Downloads\ProyectoAutomatas-main (1)\ProyectoAutomatas-main\src\main\java\com\mycompany\proyectoatomatas\view\contenedor.java
+C:\Users\migue\Downloads\ProyectoAutomatas-main (1)\ProyectoAutomatas-main\src\main\java\com\mycompany\proyectoatomatas\view\PanelAutomata.java
+C:\Users\migue\Downloads\ProyectoAutomatas-main (1)\ProyectoAutomatas-main\src\main\java\com\mycompany\proyectoatomatas\view\PanelRegex.java
+C:\Users\migue\Downloads\ProyectoAutomatas-main (1)\ProyectoAutomatas-main\src\main\java\com\mycompany\proyectoatomatas\view\VentanaConversionRegex.java
+C:\Users\migue\Downloads\ProyectoAutomatas-main (1)\ProyectoAutomatas-main\src\main\java\com\mycompany\proyectoatomatas\view\VentanaPrincipal.java
+C:\Users\migue\Downloads\ProyectoAutomatas-main (1)\ProyectoAutomatas-main\src\main\java\com\mycompany\proyectoatomatas\view\VentanaTablaTransicion.java
